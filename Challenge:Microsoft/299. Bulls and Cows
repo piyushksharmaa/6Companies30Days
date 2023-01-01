@@ -1,0 +1,43 @@
+// This was a brute force approach where i store indexes of all occurrences of characters in both the strings in a map and then iterate over secret map and finding 
+whether this character exists in guess or not and if exists then moving on to check bulls and cows.
+-> Bulls can be calculated simply by just pushing indexes on a common map of both the vectors and then if occurrence of any index is greater than 1 then it means 
+that it is a bull.
+-> Cows can be calculated by min(size of vector 1, size of vector 2)- number of bulls on that character.
+
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        map<char,vector<int>> mp1,mp2;
+        int n=secret.size();
+        for(int i=0;i<n;i++){mp1[secret[i]].push_back(i);}
+        for(int i=0;i<n;i++){mp2[guess[i]].push_back(i);}
+        int bulls=0,cows=0;
+        for(auto it1: mp1){
+            if(mp2.count(it1.first)){
+                vector<int> vec1=it1.second;
+                vector<int> vec2=mp2[it1.first];
+                int s1=vec1.size();
+                int s2=vec2.size();
+                map<int,int> mp3;
+                for(int i=0;i<s1;i++){mp3[vec1[i]]++;}
+                for(int i=0;i<s2;i++){mp3[vec2[i]]++;}
+                int temp=0;
+                for(auto it: mp3){
+                    if(it.second==2){temp++;}
+                }
+                int min_sz=min(s1,s2);
+                cows+=(min_sz-temp);
+                // cout<<temp<<" "<<cows<<endl;
+                bulls+=temp;
+            }
+        }
+        string s_cows=to_string(cows);
+        string s_bulls=to_string(bulls);
+        string res="";
+        res+=(s_bulls);
+        res.push_back('A');
+        res+=(s_cows);
+        res.push_back('B');
+        return res;
+    }
+};

@@ -1,0 +1,33 @@
+class Solution {
+public:
+    // In this question, we have been asked to form a total sum of n by combination of k 
+    // numbers and we can use numbers from 1 to 9 and each number can be used at most once
+    // so using recursion for this as constraints are very low. 
+    // so looping from 1 to n i am trying to cover all the cases and in the end if my vector 
+    // temp size equals to k and sum as n then we can count that in our final answer vector.
+    // Considering some base cases also here if my temp vector size passes k then i will not 
+    // consider that and same for if my sum passes n.
+    
+    vector<vector<int>> ans;
+    void solver(int i,int sum,vector<int>& temp,int n,int k){
+        if(temp.size()>k){return ;}
+        if(sum>n){return ;}
+        if(temp.size()==k and (sum)==n){
+            // temp.push_back(i);
+            ans.push_back(temp);
+            // ans.pop_back();
+            return ;
+        }
+        for(int j=i;j<=9;j++){
+            temp.push_back(j);
+            solver(j+1,sum+j,temp,n,k);
+            temp.pop_back();
+        }
+        
+    }
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<int> temp;
+        solver(1,0,temp,n,k);
+        return ans;
+    }
+};

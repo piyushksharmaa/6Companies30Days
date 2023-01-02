@@ -1,0 +1,35 @@
+class Solution {
+public:
+    /*
+    try finding the value of F[i]-F[i-1] in terms of i
+    See suppose teen element hai
+    Then f0 hoga 0a0+1a1+2*a2
+    F1 hoga 0a1+1a2+2*a0 
+    So F1-F0 bana 2a0-a1-a2
+    Or 3a0-(a0+a1+a2)=3a0-sum
+    So similary Fi-F(i-1) hoga n*a(i-1)-sum
+    So bas F(0) nikal lo o(n) and baaki saare is formule se nikal lo o(1) me.. And max lelo sabko
+    Jab bhi elements ko index se multiply krte hai tab index and sum ka kuch relation hamesha hi nikalta hai
+    And since me rotation tha to index aur index-1 me bhi kuch rahega relation
+    So isliyen yeh intuition aaya
+    */
+    
+    
+    int maxRotateFunction(vector<int>& nums) {
+        int F0=0;
+        int n=nums.size();
+        int sum=0;
+        for(int i=0;i<n;i++){
+            F0+=(nums[i]*i);
+            sum+=(nums[i]);
+        }
+        int max_ans=F0;
+        int prev=F0;
+        for(int i=1;i<n;i++){
+            int next=n*nums[i-1]-sum+prev;
+            max_ans=max(max_ans,next);
+            prev=next;
+        }
+        return max_ans;
+    }
+};

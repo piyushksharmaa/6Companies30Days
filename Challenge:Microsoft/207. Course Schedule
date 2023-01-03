@@ -1,0 +1,48 @@
+class Solution {
+public:
+    // In this question we have to find whether we will able to complete all the courses.
+    // But there is one condition that we have to first complete 1 if we want to do 0. [0,1]
+    // So for this if there exists a topological sort order for this then only this will be possible.
+    // And for topological sort we have a condition that there must be no cycle present in directed graph.
+    // So for this we will not follow the usual order as we followed in checking cycle in undirected graph.
+    // Here, we will take a dfs_vis array in which we when enter mark it 1 and leaving it mark 0.
+    // so that we will be able to know that if this cycle occured in same recursion call or not.
+    // Other wise it is not a cycle if we get vis[root]==1. in other cycle. 
+    /*
+        1-> 2 ->3
+        |       |         This is not a cycle.
+        4-> 5-> 6
+    
+    */
+    bool solver(int root,vector<int> adj[],vector<int>& vis,vector<int>& dfs_vis){
+        vis[root]=1;
+        dfs_vis[root]=1;
+        for(auto it: adj[root]){
+            if(vis[it]==0){
+                if(solver(it,adj,vis,dfs_vis)){return true;}
+            }
+            else if(dfs_vis[it]==1){
+                return true;
+            }
+        }
+        dfs_vis[root]=0;
+        return false;
+    }
+    bool canFinish(int n, vector<vector<int>>& prerequisites) {
+        vector<int> adj[n];
+        for(int i=0;i<prerequisites.size();i++){
+            adj[prerequisites[i][0]].push_back(prerequisites[i][1]);
+            // adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }
+        vector<int> vis(n,0);
+        vector<int> dfs_vis(n,0);
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                if(solver(i,adj,vis,dfs_vis)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};

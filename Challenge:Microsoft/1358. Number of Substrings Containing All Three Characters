@@ -1,0 +1,20 @@
+class Solution {
+public:
+    // Just use one hint here that is For each position we simply need to find the first occurrence of a/b/c on or       // after this position.
+    int numberOfSubstrings(string s) {
+        map<char,vector<int>> mp;
+        for(int i=0;i<s.size();i++){
+            mp[s[i]].push_back(i);
+        }
+        int count=0;
+        for(int i=0;i<s.size()-2;i++){
+            auto it1=lower_bound(mp['a'].begin(),mp['a'].end(),i);
+            auto it2=lower_bound(mp['b'].begin(),mp['b'].end(),i);
+            auto it3=lower_bound(mp['c'].begin(),mp['c'].end(),i);
+            if(it1==mp['a'].end() or it2==mp['b'].end() or it3==mp['c'].end()){continue;}
+            int max_index=max(*it1,max(*it2,*it3));
+            count+=(s.size()-max_index);
+        }
+        return count;
+    }
+};

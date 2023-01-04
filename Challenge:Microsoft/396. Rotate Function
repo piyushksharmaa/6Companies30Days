@@ -12,6 +12,10 @@ public:
     Jab bhi elements ko index se multiply krte hai tab index and sum ka kuch relation hamesha hi nikalta hai
     And since me rotation tha to index aur index-1 me bhi kuch rahega relation
     So isliyen yeh intuition aaya
+
+    One mistake was there that it must be 
+    your function was right...just nums[n-i] hona chaiye tha instead of nums[n-1]
+    i=1 tha tumhara isliyen tumhe nums[n-1] laga nums[n-i] ke jgh
     */
     int maxRotateFunction(vector<int>& nums) {
         int F0=0;
@@ -23,8 +27,10 @@ public:
         }
         int max_ans=F0;
         int prev=F0;
+        // cout<<prev<<endl;
         for(int i=1;i<n;i++){
-            int next=n*nums[i-1]-sum+prev;
+            int next=-n*nums[n-i]+sum+prev;
+            
             max_ans=max(max_ans,next);
             prev=next;
         }

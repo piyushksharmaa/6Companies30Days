@@ -1,0 +1,13 @@
+class Solution {
+public:
+    double nthPersonGetsNthSeat(int n) {
+        // In this question so here we are given that we have n passengers with n seats. 
+        // 1st passenger has lost the ticket and picks a seat randomly. 
+        // But after that, rest of the passengers will take their seats if it's still available, and pick other seats         // randomly when they find their seats occupied.
+        // So if 1st person picks his own seat then all will get their own seat but if it picks other person seats
+        // then, other person picks 1st seat as all other will pick their seat.
+        // Read questions properly piyush.
+        if(n==1){return 1.00000;}
+        else{return 0.50000;}
+    }
+};

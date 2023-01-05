@@ -1,0 +1,16 @@
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template<class T> using oset=tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
+class Solution {
+public:
+    long long numberOfPairs(vector<int>& nums1, vector<int>& nums2, int diff) {
+        oset <pair<int,int>> st;   // For duplicate elements we are using pair and we can store indexes also as we                                      // know in set there are unique elements that's why.
+        long long ans=0;
+        for(int i=0;i<nums1.size();i++){
+            int k=nums1[i]-nums2[i]+diff;
+            ans+=(st.order_of_key({k,INT_MAX}));  // returns to the number of items that are strictly smaller than our item k so we are putting INT_MAX on indexes so indexes will always be less than INT_MAX so if we get k==k then my indexes will be small than INT_MAX but as a pair it will get considered as smaller. so it is to make all the values considered less than equals to.
+            st.insert({nums1[i]-nums2[i],i});
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,33 @@
+// One edge i missed here is that if test case is given like this 
+
+[0,0]
+[1,1]
+[0,0]
+[1,1]
+
+So we have to also consider the cases where length can be zero and we are counting it as a side.
+
+
+class Solution {
+public:
+    int solver(vector<int>& a, vector<int>& b){
+        return (a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]);
+    }
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        vector<int> sides={solver(p1,p2),solver(p1,p3),solver(p1,p4),solver(p2,p3),solver(p2,p4),solver(p3,p4)};
+        unordered_map<int,int> mp;
+        for(int i=0;i<sides.size();i++){
+            mp[sides[i]]++;
+        }
+        if(mp.size()!=2){
+            return false;
+        }
+        for(auto it: mp){
+            if(it.first==0){return false;}
+        }
+        for(auto it: mp){
+            return (it.second==4 or it.second==2);
+        }
+        return false;
+    }
+};

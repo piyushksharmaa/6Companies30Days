@@ -1,0 +1,23 @@
+class Solution {
+public:
+    // What we have to do is that for every point we have to make a separate map of how many total number of lengths
+    // that are equal with respect to this points
+    // Now we will iterate on the map and find for each distance if we have n points so for each i point we have n-1 
+    // points so in total we have n*(n-1) total. 
+    int numberOfBoomerangs(vector<vector<int>>& points) {
+        int n=points.size();
+        int count=0;
+        for(int i=0;i<n;i++){
+            map<int,int> mp;
+            for(int j=0;j<n;j++){
+                int dist=(points[i][0]-points[j][0])*(points[i][0]-points[j][0]) + (points[i][1]-points[j][1])*(points[i][1]-points[j][1]);
+                mp[dist]++;
+            }
+            for(auto it: mp){
+                int num=it.second;
+                count+=(num*(num-1));
+            }
+        }
+        return count;
+    }
+};

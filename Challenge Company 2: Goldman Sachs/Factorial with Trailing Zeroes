@@ -1,0 +1,10 @@
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int count=0;
+        for(int i=1;pow(5,i)<=n;i++){
+            count+=(n/pow(5,i));
+        }
+        return count;
+    }
+};

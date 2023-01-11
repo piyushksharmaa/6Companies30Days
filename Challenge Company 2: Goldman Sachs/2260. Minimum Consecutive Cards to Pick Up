@@ -1,0 +1,24 @@
+// In this what we have done is we have been given an array and question is similar to finding minimum distance 
+// between two same elements so we will just store new coming elements onto the map and elements which have
+// previously occurred we can find distance using them and then update their values to currently occurred values as 
+// we need min distance.
+class Solution {
+public:
+    int minimumCardPickup(vector<int>& cards) {
+        int min_distance=INT_MAX;
+        unordered_map<int,int> mp;
+        int n=cards.size();
+        for(int i=0;i<n;i++){
+            if(mp.count(cards[i])){
+                int curr_distance=i-mp[cards[i]]+1;
+                min_distance=min(min_distance,curr_distance);
+                mp[cards[i]]=i;
+            }
+            else{
+                mp[cards[i]]=i;
+            }
+        }
+        if(min_distance==INT_MAX){return -1;}
+        return min_distance;
+    }
+};

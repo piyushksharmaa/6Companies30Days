@@ -1,0 +1,47 @@
+// This question's logic was quiet different in this we have to find good triplets in both array which is common in 
+// both by value and by increasing order of index.
+// So the brute force way of doing this question was to choose a b c and we can iterate for b in first array and we 
+// will check if same b is present there in nums2. and if present, then we can check how many common elements we have
+// in left and right of both the array that gonna act as a and c for our triplet.
+// But, what this gonna take more than n^2. and will give TLE.
+// So, To further optimize this we can make use of PBDS in which what we can do is first store position of all nums2 // elements in map and then making left,right ordered set in which we gonna store position of all before and upcoming // elements 
+// Main approach: we will iterate from i=1 to i=n-2 and in left we will store the indexes of all the elements we have // traced in nums1 and have common in nums2 also. and in right the upcoming common elements.
+// So as we go along tracing using example1 
+// nums1 = 2 0 1 3      nums2= 0 1 2 3
+// for i=2
+// left= 0 
+// right= 1
+// then as we can see that at i=2 we have 1 there in nums1 and we will find position of 1 in nums2 which is also 1.
+// so, finding order_of_key(map[nums1[i]]) in left which will be 1 (as order of key returns number of elements 
+// strictly less than key.) 
+// Same for right, right.size()-right.order_of_key(map[nums1[i]]); which will be 1.
+// So adding this to ans by multiplying both the ans.
+
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template<class T> using oset=tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
+class Solution {
+public:
+    long long goodTriplets(vector<int>& nums1, vector<int>& nums2) {
+        int n=nums1.size();
+        unordered_map<int,int> mp;
+        for(int i=0;i<n;i++){
+            mp[nums2[i]]=i;
+        }
+        oset <int> left,right;
+        left.insert(mp[nums1[0]]);
+        for(int i=2;i<n;i++){
+            right.insert(mp[nums1[i]]);
+        }
+        long long ans=0;
+        for(int i=1;i<n-1;i++){
+            int pos_curr=mp[nums1[i]];
+            long long first=left.order_of_key(pos_curr);
+            long long second=right.size()-right.order_of_key(pos_curr);
+            ans+=(first*second);
+            left.insert(mp[nums1[i]]);
+            right.erase(mp[nums1[i+1]]);
+        }
+        return ans;
+    }
+};

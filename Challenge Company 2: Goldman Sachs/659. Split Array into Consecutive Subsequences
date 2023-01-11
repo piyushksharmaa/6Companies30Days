@@ -1,0 +1,195 @@
+/*
+class Solution {
+public:
+    /* Idea:
+    1) First we store frequency of all the elements into the array.
+    2) Now, for every index, we have two possibility:
+       i) either we append it into some coming subsequence
+       ii) or we start a new subsequence with this number.
+       
+    3) If we check the first condition, i.e 
+    either we append it into some coming subsequence, then 
+    we should have a coming subsequence that is just ending with this 
+    (current element - 1), suppose we have current number as 3
+    then we want that there should have a coming subsequence who is ending 
+    with 2, because after so only we are able to append 3 here.
+    
+    4) If this condition satisfies, i.e we find a coming subsequence that is 
+    ending with (current element - 1), then we will append this element into
+    that subsequence. Since we append this current element into that coming
+    subsequence, therefore this subsequence is now ending with this current
+    element. suppose we have current number as 3
+    then we want that there should have a coming subsequence who is ending 
+    with 2, suppose we append 3 here, now that subsequence is ending with 3
+    not now 2. so we have to take care of this.
+    
+    5) But suppose there is no coming subsequence that is ending with 
+    (current element - 1), so we have to start a new subsequence by taking
+    this element only. So suppose 3 is our current element, and we want to
+    start a new subsequence with this 3, then according to given 
+    condition "All subsequences have a length of 3 or more." so if 
+    we want to start a subsequence with 3, then for following this condition
+    4 and 5 should be there.
+    
+    6) That's why we will make a new map, and that map will store, 
+    what is the last number of subsequence ending with.
+    
+    DRY RUN: 
+    take array: [1, 2, 3, 3, 4, 5]
+    
+    now, first step: store frequency, so map will look like
+    1 --> 1
+    2 --> 1
+    3 --> 2
+    4 --> 1
+    5 --> 1
+    
+    Now, Intially every thing is empty
+    for i = 0, arr[0] = 1, we will ask whether is there any coming 
+    subsequence that is ending with (1 - 1 = 0) zero, we will say no, 
+    so we move to next step, that okay if there is no subsequence
+    so we should start with 1, now for forming a subsequence with 1
+    we will say 2 and 3 should be there, so we will check in our frequency
+    whether 2 and 3 is present in our frequency map, we will get our answer
+    as true, that yes 2 and 3 is there, so we will make a subsequence.
+    
+    Now, we form a subsquence with 1 as 1, 2, 3 so we have to decreae the 
+    frequency of all three, so we will do this and now 
+    our subsequence is ending with 3.
+    
+    now, move forward, i = 1, arr[1] = 2,
+    since we already use this element and frequency of this becomes zero,
+    so we will move forward.
+    
+    move forward, i = 2, arr[2] = 3, 
+    since intially it's frequency is 2, but after forming that subsequence 
+    (1, 2, 3) it's frequency left is 1
+    
+    again we ask the same question, whether is there any coming subsequence
+    which is (3 - 1 = 2) two, we will get our answer as NO, since there is 
+    a subsequence present which is ending with 3 only.
+    So, we will say there is no subsequence which is ending with 2.
+    If there is no subsequencw which is ending with 2, then what we will try to
+    do, we will start a new subseuqnce from here.
+    So if I want to start a subsequence with 3, we will say that 
+    4 and 5 should be there in the frequency map, we will check 
+    is it possible, we get our answer as YES, so we will create this
+    subsequence, and now we have anthor subsequence which is ending with 5.
+    
+    now, move forward, i = 3, arr[3] = 3,
+    since we already use this element and frequency of this becomes zero,
+    so we will move forward.
+    
+    now, move forward, i = 4, arr[4] = 4,
+    since we already use this element and frequency of this becomes zero,
+    so we will move forward.
+    
+    now, move forward, i = 5, arr[5] = 5,
+    since we already use this element and frequency of this becomes zero,
+    so we will move forward.
+    
+    therefore at last we are able to use every element and create susbequence
+    by following akk the conditions so we will return true.
+    
+
+    bool isPossible(vector<int>& arr) {
+        int n = arr.size(); // extract the size of the array
+        
+        // declaring map to store frequency
+        unordered_map<int, int> frequency; 
+        
+        for(int i = 0; i < n; i++) // traverse in the array
+        {
+            frequency[arr[i]]++; // store frequency
+        }
+        
+        // defining anthor map which will tell us whether is there any
+        // subsequence which is ending with a particular number
+        unordered_map<int, int> numberEndingWith;
+        
+        // traverse into the array
+        for(int i = 0; i < n; i++)
+        {
+            // if frequency is zero, that means we are already using 
+            // this element in any other subsequence, so move to 
+            // next element
+            if(frequency[arr[i]] == 0)  
+            {
+                continue;
+            }
+            
+            // we will use this element now, so decrease it's frequency
+            frequency[arr[i]]--; 
+            
+            int prevElement = arr[i] - 1; // previous element
+            int justNext = arr[i] + 1; // next element
+            int justNextPlusOne = arr[i] + 2; // next second element
+            
+            // Is there any coming subsequence that is ending with
+            // previous element, 
+            // if yes, then append this current element 
+            // and update that, now this current element will
+            // act as ending with element
+            if(numberEndingWith[prevElement] > 0)
+            {
+                // so decrease freq of prev ele
+                numberEndingWith[prevElement]--; 
+                
+                // and this current ele becomes ending with
+                numberEndingWith[arr[i]]++; 
+            } // else we want to stat a new subsequence with this curr ele, so
+            else if(frequency[justNext] > 0 && frequency[justNextPlusOne] > 0)
+            {
+                // so if just next is present as well as 
+                // just Next PlusOne is also present so 
+                // decrease there freuqencies and update the 
+                // case number ending with
+                frequency[justNext]--;                       
+                frequency[justNextPlusOne]--;
+                
+                numberEndingWith[justNextPlusOne]++;
+            }
+            else  // else return false
+            {
+                return false;
+            }
+        }
+        
+        // if we are able to put all elements into a valid cofiguration
+        // then return true
+        return true;
+    }
+};
+*/
+
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        int n=nums.size();
+        unordered_map<int,int> freq;
+        for(int i=0;i<n;i++){freq[nums[i]]++;}
+        unordered_map<int,int> number_ending;
+        for(int i=0;i<n;i++){
+            if(freq[nums[i]]==0){
+                continue;
+            }
+            freq[nums[i]]--;
+            int prev=nums[i]-1;
+            int next=nums[i]+1;
+            int next_to_next=nums[i]+2;
+            if(number_ending[prev]>0){
+                number_ending[prev]--;
+                number_ending[nums[i]]++;
+            }
+            else if(freq[next]>0 and freq[next_to_next]>0){
+                freq[next]--;
+                freq[next_to_next]--;
+                number_ending[next_to_next]++;
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
+    }
+};

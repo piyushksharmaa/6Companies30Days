@@ -1,0 +1,62 @@
+class Solution {
+public:
+    string fractionToDecimal(int n, int d) {
+        string ans="";
+        bool check1=false;
+        bool check2=false;
+        if(n<0){
+            check1=true;
+            n=abs(n);
+        }
+        if(d<0){
+            check2=true;
+            d=abs(d);
+        }
+        long long int q=n/d;
+        long long int r=n%d;
+        string temp1=to_string(q);
+        ans+=temp1;
+        if(r==0){
+            if(ans=="0"){
+                return ans;
+            }
+            if(check1 and !check2){
+                ans.insert(0,"-");
+            }
+            if(!check1 and check2){
+                ans.insert(0,"-");
+            }
+            return ans;
+        }
+        else{
+            unordered_map<long long int,long long int> freq;
+            ans+=".";
+            // bool check=true;
+            long long int rep=0;
+            while(r!=0){
+                if(freq.count(r)){
+                    rep=freq[r];
+                    ans.insert(rep,"(");
+                    ans.push_back(')');
+                    break;
+                }
+                else{
+                    // cout<<r<<endl;
+                    freq[r]=ans.size();
+                    r*=10;
+                    q=r/d;
+                    r=r%d;
+                    temp1=to_string(q);
+                    ans+=temp1;
+                }
+            }
+        }
+        if(check1 and !check2){
+            ans.insert(0,"-");
+        }
+        if(!check1 and check2){
+            ans.insert(0,"-");
+        }
+        return ans;
+    }
+};

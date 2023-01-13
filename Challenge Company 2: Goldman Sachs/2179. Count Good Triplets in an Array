@@ -1,3 +1,4 @@
+*
 // This question's logic was quiet different in this we have to find good triplets in both array which is common in 
 // both by value and by increasing order of index.
 // So the brute force way of doing this question was to choose a b c and we can iterate for b in first array and we 
@@ -16,6 +17,8 @@
 // strictly less than key.) 
 // Same for right, right.size()-right.order_of_key(map[nums1[i]]); which will be 1.
 // So adding this to ans by multiplying both the ans.
+*
+
 
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;

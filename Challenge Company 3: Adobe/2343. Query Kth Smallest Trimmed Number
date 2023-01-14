@@ -1,0 +1,32 @@
+// This is quiet easy problem as if we see constraints here then they are very less comparatively so we can do bruteforce // also (nearly O(n^3)). 
+One mistake i have done here is that i tried to convert strings to integers for comaparision but // there is no need of that as we can compare it 
+without converting it just by sorting.
+
+class Solution {
+public:
+    vector<int> smallestTrimmedNumbers(vector<string>& nums, vector<vector<int>>& queries) {
+        int n_size=nums.size();
+        int q_size=queries.size();
+        vector<int> ans;
+        for(int i=0;i<q_size;i++){
+            int trim=queries[i][1];
+            int k=queries[i][0];
+            vector<pair<string,int>> store;
+            for(int j=0;j<n_size;j++){
+                string temp=nums[j];
+                if(trim<temp.size()){
+                    string st=temp.substr(temp.size()-trim,trim);
+                    // int convert=stoi(st);
+                    store.push_back({st,j});
+                }
+                else{
+                    // int convert=stoi(temp);
+                    store.push_back({temp,j});
+                }
+            }
+            sort(store.begin(),store.end());
+            ans.push_back(store[k-1].second);
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,39 @@
+class Solution {
+public:
+    long long maxMatrixSum(vector<vector<int>>& arr) {
+        int n=arr.size();
+        int min_pos=INT_MAX;
+        int max_neg=INT_MIN;
+        bool zeroes_present=false;
+        int count_neg=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(arr[i][j]>0){min_pos=min(min_pos,arr[i][j]);}
+                else if(arr[i][j]<0){max_neg=max(max_neg,arr[i][j]);count_neg++;}
+                if(arr[i][j]==0){zeroes_present=true;}
+            }
+        }
+        long long int sum=0;
+        if(zeroes_present or count_neg%2==0){
+            for(int i=0;i<n;i++){
+                for(int j=0;j<n;j++){
+                    sum+=(abs(arr[i][j]));
+                }
+            }
+        }
+        else if(count_neg%2!=0){
+            for(int i=0;i<n;i++){
+                for(int j=0;j<n;j++){
+                    sum+=(abs(arr[i][j]));
+                }
+            }
+            if(abs(max_neg)>=abs(min_pos)){
+                sum-=(2*abs(min_pos));
+            }
+            if(abs(max_neg)<abs(min_pos)){
+                sum-=(2*abs(max_neg));
+            }
+        }
+        return sum;
+    }
+};

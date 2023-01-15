@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int numMatchingSubseq(string s, vector<string>& words) {
+        int n=words.size();
+        unordered_map<char,vector<int>> mp;                         // Unordered map is used as it performs operations in O(1)
+        for(int i=0;i<s.size();i++){
+            mp[s[i]].push_back(i);
+        }
+        int count=0;
+        for(int i=0;i<n;i++){
+            bool check=true;
+            string curr=words[i];
+            int prev=-1;
+            for(int j=0;j<curr.size();j++){
+                // vector<int> vec=mp[curr[j]];                  // This was increasing our time complexity so to optimize it further we used mp[curr[j]]
+                // cout<<prev<<endl;
+                auto it=upper_bound(mp[curr[j]].begin(), mp[curr[j]].end(), prev);
+                if(it!=mp[curr[j]].end()){
+                    prev=*it;
+                }
+                else{
+                    check=false;
+                    break;
+                }
+            }
+            if(check){
+                count++;
+            }
+        }
+        return count;
+    }
+};

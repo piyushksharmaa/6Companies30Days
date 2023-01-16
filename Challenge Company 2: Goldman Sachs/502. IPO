@@ -1,0 +1,51 @@
+/*
+First we will store all the projects in projects vector as pairs {Profit(i), Capital(i)};
+Now we will sort all the projects according to its capital value.
+Now we will fetch all the projects that we can perform for our own capital value.
+After fetching all these projects sotre their profit value in Max Heap (maxProfit in below code).
+Now check if the Heap is Empty or not, if its not empty then take the top value of the heap (indicates that we chose max profit value from given projects, think greedy here).
+Now perform step 3, k times because we want to perform exactly k projects to gain max profit.
+class Solution {
+public:
+
+int findMaximizedCapital(int k, int w, vector<int>& profits, vector<int>& capital) {
+    int n=profits.size();
+    vector<pair<int,int>> projects(n);
+    for(int i=0;i<n;i++) projects[i]={profits[i],capital[i]}; 
+    int i=0;
+    sort(projects.begin(),projects.end(),[&](pair<int,int> a,pair<int,int> b){ return a.second<b.second;});
+    priority_queue<int> maxProfit;
+    while(k--){
+        while(i<n && w>=projects[i].second) maxProfit.push(projects[i++].first);
+        
+        if(!maxProfit.empty()) w+=maxProfit.top(),maxProfit.pop();
+    }
+    return w;
+}
+};
+
+*/
+class Solution {
+public:
+    int findMaximizedCapital(int k, int w, vector<int>& profits, vector<int>& capital) {
+        int n=profits.size();
+        vector<pair<int,int>> store(n);
+        for(int i=0;i<n;i++){
+            store[i]={capital[i],profits[i]};
+        }
+        sort(store.begin(),store.end());
+        int start=0;
+        priority_queue<int> tasks;
+        while(k--){
+            while(start<n and w>=store[start].first){
+                tasks.push(store[start].second);
+                start++;
+            }
+            if(!tasks.empty()){
+                w+=tasks.top();
+                tasks.pop();
+            }
+        }
+        return w;
+    }
+};

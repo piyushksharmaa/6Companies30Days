@@ -1,0 +1,42 @@
+class Solution {
+public:
+    map<pair<int,vector<int>>,int> mp;
+    int solver(vector<int>& price, vector<vector<int>>& special, vector<int>& needs,int index){
+        if(index==special.size()){
+            // Buy everything at normal price
+            int res=0;
+            for(int i=0;i<needs.size();i++){
+                res+=(needs[i]*price[i]);
+            }
+            return res;
+        }
+        // If we don't want to select this current offer
+        if(mp.count({index,needs})){
+            return mp[{index,needs}];
+        }
+        int reject=solver(price,special,needs,index+1);
+        int accept=0;
+        // Want to apply this offer
+        bool flag=true;
+        for(int i=0;i<needs.size();i++){
+            if(needs[i]<special[index][i]){
+                flag=false;
+                break;
+            }   
+        }
+        if(flag){
+            vector<int> temp=needs;
+            for(int i=0;i<needs.size();i++){
+                temp[i]=temp[i]-special[index][i];    // Decreament the needs
+            }
+            accept=special[index][needs.size()]+solver(price,special,temp,index);
+        }
+        else{
+            return reject;
+        }
+        return mp[{index,needs}]=min(accept,reject);
+    }
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        return solver(price,special,needs,0);
+    }
+};

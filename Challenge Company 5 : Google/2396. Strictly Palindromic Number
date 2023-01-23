@@ -1,0 +1,8 @@
+class Solution {
+public:
+    //Consider the representation of the given number in the base n - 2.
+    //The number n in base (n - 2) is always 12, which is not palindromic.
+    bool isStrictlyPalindromic(int n) {
+        return false;
+    }
+};

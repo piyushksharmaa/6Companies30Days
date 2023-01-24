@@ -1,0 +1,49 @@
+// So what we are doing in this question is we will first nullify all the 0's that are on the edges and also
+// which are connected to these 0's. because these are not locked islands so all are converted to 1 because they are not
+// going to contribute to our answer as they are directly connected to border so no advantage of having them and their
+// neighbours as we have to consider only those who are totally surrounded by 1's
+
+class Solution {
+public:
+    void solver(int i,int j,int m,int n,vector<vector<int>>& grid){
+        if(i<0 or j<0 or i>=m or j>=n or grid[i][j]==1){return ;}
+        grid[i][j]=1;
+        solver(i+1,j,m,n,grid);
+        solver(i-1,j,m,n,grid);
+        solver(i,j+1,m,n,grid);
+        solver(i,j-1,m,n,grid);
+    }
+    int closedIsland(vector<vector<int>>& grid) {
+        int m=grid.size();
+        int n=grid[0].size();
+        int count=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0 or j==0 or i==m-1 or j==n-1){
+                    if(grid[i][j]==0){
+                        solver(i,j,m,n,grid);   
+                    }
+                }
+            }
+        }
+        // for(int i=0;i<m;i++){
+        //     for(int j=0;j<n;j++){
+        //         cout<<grid[i][j]<<" ";
+        //     }
+        //     cout<<endl;
+        // }
+        
+//this loop is simple just to take all the closed islands remaining and 
+//we increase count everytime dfs is called because if a dfs ends it means 
+//that our closed island has ended.
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==0){
+                    solver(i,j,m,n,grid);  
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+};

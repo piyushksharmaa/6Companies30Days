@@ -1,0 +1,54 @@
+class Solution {
+public:
+    void merge(vector<int>& nums,int start,int end){
+        int mid=((start)+(end-start)/2);
+        int len1=mid-start+1;
+        int len2=end-mid;
+        int mainArrayindex=start;
+        //copy values
+        vector<int> first,second;
+        for(int i=0;i<len1;i++){
+            first.push_back(nums[mainArrayindex++]);
+        }
+        for(int i=0;i<len2;i++){
+            second.push_back(nums[mainArrayindex++]);
+        }
+        //merge 2 sorted arrays
+        int index1=0;
+        int index2=0;
+        mainArrayindex=start;
+        while(index1<len1 and index2<len2){
+            if(first[index1]<second[index2]){
+                nums[mainArrayindex++]=first[index1++];
+            }
+            else{
+                nums[mainArrayindex++]=second[index2++];
+            }
+        }
+        while(index1<len1){
+            nums[mainArrayindex++]=first[index1++];
+        }
+        while(index2<len2){
+            nums[mainArrayindex++]=second[index2++];
+        }
+    }
+    void mergeSort(vector<int>& nums,int start,int end){
+        //base case as a single element is sorted itself
+        if(start>=end){
+            return ;
+        }
+        int mid=((start)+(end-start)/2);
+        //left part sort krnaa hai
+        mergeSort(nums,start,mid);
+        //right part sort krrna hai
+        mergeSort(nums,mid+1,end);
+        merge(nums,start,end);
+    }
+    vector<int> sortArray(vector<int>& nums) {
+        int n=nums.size();
+        int start=0;
+        int end=n-1;
+        mergeSort(nums,start,end);
+        return nums;
+    }
+};

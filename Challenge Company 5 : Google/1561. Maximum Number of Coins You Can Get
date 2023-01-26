@@ -1,0 +1,19 @@
+// sort the array and try to give minimum to bob, in any triplet alice is going to get the maximum, we cannot do anything about that
+// but we can try and dump the minimum elmeents to bob's account so that we can keep the decently large elements with us
+
+class Solution {
+public:
+    int maxCoins(vector<int>& piles) {
+        sort(piles.begin(),piles.end());
+        int n=piles.size();
+        int bob=0;
+        int you=n-2;
+        int count=0;
+        while(bob<you){
+            count+=(piles[you]);
+            bob++;
+            you-=2;
+        }
+        return count;
+    }
+};

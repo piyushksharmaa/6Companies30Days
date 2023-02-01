@@ -1,0 +1,54 @@
+class Solution {
+public:
+    static bool comp(pair<int,string>& p1,pair<int,string>& p2){   
+        if(p1.first==p2.first){
+            return p1.second<p2.second;
+        }
+        return p1.first>p2.first;
+    }
+    vector<vector<string>> mostPopularCreator(vector<string>& creators, vector<string>& ids, vector<int>& views) {
+        map<string,long long int> count_views; // Here we will store all the creator's view counts.
+        map<string,vector<pair<int,string>>> store;     // Alice ->  1->a, 2->b, 2->c == Then we will sort it in reverse order but for second element we will sort it normally
+        int n=creators.size();
+        long long int max_views=0;  // For storing maximum views 
+        for(int i=0;i<n;i++){
+            count_views[creators[i]]+=views[i];
+            max_views=max(max_views,count_views[creators[i]]);
+            store[creators[i]].push_back({views[i],ids[i]});
+        }
+        // for(auto it: store){
+        //     cout<<it.first<<endl;
+        //     vector<pair<int,string>> v=it.second;
+        //     for(int i=0;i<v.size();i++){
+        //         cout<<v[i].first<<" "<<v[i].second<<endl;
+        //     }
+        //     cout<<endl;
+        // }
+        for(auto it: store){
+            vector<pair<int,string>> v=it.second;
+            sort(v.begin(),v.end(),comp);
+            store[it.first]=v;
+        }
+        // for(auto it: store){
+        //     cout<<it.first<<endl;
+        //     vector<pair<int,string>> v=it.second;
+        //     for(int i=0;i<v.size();i++){
+        //         cout<<v[i].first<<" "<<v[i].second<<endl;
+        //     }
+        //     cout<<endl;
+        // }
+        vector<vector<string>> res;
+        for(auto it: count_views){
+            if(it.second==max_views){
+                vector<string> temp;
+                temp.push_back(it.first);
+                res.push_back(temp);
+            }
+        }
+        for(int i=0;i<res.size();i++){
+            string temp=store[res[i][0]][0].second;
+            res[i].push_back(temp);
+        }
+        return res;
+    }
+};
